@@ -2,6 +2,7 @@ package me.fluxmarket.module.sell;
 
 import me.fluxmarket.FluxMarket;
 import me.fluxmarket.module.flux.FluxEngine;
+import me.fluxmarket.module.profit.ProfitDao;
 import me.fluxmarket.module.shop.ShopItem;
 import me.fluxmarket.module.shop.ShopRegistry;
 import me.fluxmarket.util.FormatUtils;
@@ -61,6 +62,30 @@ public class SellService {
 
         plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () ->
                 dao.upsertSellTop(player.getUniqueId(), player.getName(), finalTotalForRecord));
+
+        // Record profit log entries (buy_price = 0, sell_price = per-unit earned)
+        ProfitDao profitDao = plugin.getProfitDao();
+        if (profitDao != null) {
+            long timestamp = System.currentTimeMillis();
+            for (Map.Entry<String, Integer> entry : soldAmounts.entrySet()) {
+                String mat = entry.getKey();
+                int qty = entry.getValue();
+                if (qty <= 0) continue;
+                double earned = soldPrices.getOrDefault(mat, 0.0);
+                double pricePerUnit = earned / qty;
+                Material material;
+                try {
+                    material = Material.valueOf(mat);
+                } catch (IllegalArgumentException ignored) {
+                    continue;
+                }
+                final Material finalMat = material;
+                final double finalPpu = pricePerUnit;
+                final int finalQty = qty;
+                plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () ->
+                        profitDao.addEntry(player.getUniqueId(), finalMat, 0.0, finalPpu, finalQty, timestamp));
+            }
+        }
 
         List<String> summary = new ArrayList<>();
         for (Map.Entry<String, Integer> entry : soldAmounts.entrySet()) {
@@ -132,14 +157,16 @@ public class SellService {
         }
         earned = capSellAgainstBuy(material, base, amount, uuid, earned, engine, shopItem);
 
-        double avgPrice = amount > 0 ? earned / amount : base;
+        // Record the actual item sell price (without progression/rank multipliers — those are earning boosts, not market prices)
+        double recordPrice = shopItem.hasSellOverride() ? shopItem.sellPriceOverride()
+                : (amount > 0 ? (earned / (rankMult * progressMult)) / amount : base);
         soldAmounts.merge(material, amount, Integer::sum);
         soldPrices.merge(material, earned, Double::sum);
 
         item.setAmount(0);
 
         if (engine != null) {
-            engine.recordTransaction(uuid, material, amount, "SELL", avgPrice);
+            engine.recordTransaction(uuid, material, amount, "SELL", recordPrice);
         }
         return earned;
     }

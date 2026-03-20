@@ -1,6 +1,7 @@
 package me.fluxmarket.module.orders.gui;
 
 import me.fluxmarket.FluxMarket;
+import me.fluxmarket.gui.AnvilInputGui;
 import me.fluxmarket.gui.FluxGui;
 import me.fluxmarket.gui.GuiListener;
 import me.fluxmarket.module.orders.Order;
@@ -194,11 +195,12 @@ public class OrderCreateGui implements FluxGui {
             return;
         }
         if (slot == PICKER_SEARCH) {
-            OrderSignInput.open(player, "Search Items", "Enter item name", pickerFilter != null ? pickerFilter : "",
+            AnvilInputGui.open(plugin, player, "&8Search Items",
+                    pickerFilter != null ? pickerFilter : "",
                     value -> {
                         pickerFilter = (value == null || value.isBlank()) ? null : value.trim();
                         pickerPage = 0;
-                        plugin.getServer().getScheduler().runTask(plugin, this::openPicker);
+                        openPicker();
                     });
             return;
         }
@@ -211,11 +213,11 @@ public class OrderCreateGui implements FluxGui {
         openMain();
     }
 
-    // ── Sign inputs for amount / price ────────────────────────────────────
+    // ── Anvil inputs for amount / price ──────────────────────────────────
 
     private void openAmountInput() {
-        OrderSignInput.open(player, "Order Amount", "Enter amount",
-                amount == null ? "" : String.valueOf(amount),
+        AnvilInputGui.open(plugin, player, "&8Order — Set Amount",
+                amount == null ? "64" : String.valueOf(amount),
                 value -> {
                     if (value != null) {
                         try {
@@ -227,13 +229,13 @@ public class OrderCreateGui implements FluxGui {
                                     + "&cAmount must be a whole number above 0."));
                         }
                     }
-                    plugin.getServer().getScheduler().runTask(plugin, this::openMain);
+                    openMain();
                 });
     }
 
     private void openPriceInput() {
-        OrderSignInput.open(player, "Order Price", "Enter price each",
-                price == null ? "" : String.valueOf(price),
+        AnvilInputGui.open(plugin, player, "&8Order — Set Price/Item",
+                price == null ? "1.0" : String.valueOf(price),
                 value -> {
                     if (value != null) {
                         try {
@@ -245,7 +247,7 @@ public class OrderCreateGui implements FluxGui {
                                     + "&cMin price: $" + FormatUtils.formatMoney(plugin.getConfigManager().getOrdersMinPrice())));
                         }
                     }
-                    plugin.getServer().getScheduler().runTask(plugin, this::openMain);
+                    openMain();
                 });
     }
 

@@ -85,8 +85,13 @@ public class FluxEngine {
                 sellPrice *= multiplier;
             }
         }
-        // Anti-exploit: sell may never reach or exceed buy price
+        // Anti-exploit: sell may never reach or exceed the player's actual buy price.
+        // Include event modifier AND buy discount so the cap scales correctly in all conditions.
         double buyFloor = dynamic * (1.0 + spread) * getEventModifier(material);
+        if (playerUuid != null) {
+            org.bukkit.entity.Player p = plugin.getServer().getPlayer(java.util.UUID.fromString(playerUuid));
+            if (p != null) buyFloor *= (1.0 - plugin.getConfigManager().getBuyDiscount(p));
+        }
         return Math.max(0.01, Math.min(sellPrice, buyFloor * 0.95));
     }
 
@@ -133,7 +138,8 @@ public class FluxEngine {
             if (player != null) {
                 double multiplier = cfg.getSellMultiplier(player);
                 // Cap post-multiplier: effective sell/unit ≤ 95% of buy/unit
-                double buyRef = basePrice * (1.0 + spread) * getEventModifier(material);
+                double discount = cfg.getBuyDiscount(player);
+                double buyRef = basePrice * (1.0 + spread) * getEventModifier(material) * (1.0 - discount);
                 double maxTotal = buyRef * 0.95 * quantity;
                 totalEarned = Math.min(totalEarned * multiplier, maxTotal);
             }
@@ -191,7 +197,9 @@ public class FluxEngine {
         }
 
         if (normFactor < 1.0) {
-            demandCache.put(material, new double[]{0.0, 0.0});
+            // No recent transactions — preserve existing demand state rather than zeroing out.
+            // This prevents artificially low normFactor on next batch-sell simulation.
+            demandCache.putIfAbsent(material, new double[]{0.0, 1.0});
             return basePrice;
         }
 

@@ -25,12 +25,13 @@ public class AuctionMainGui implements FluxGui {
     public enum SortMode { NEWEST, PRICE_ASC, PRICE_DESC, EXPIRING }
 
     private static final int PAGE_SIZE = 45;
-    private static final int SLOT_PREV = 45;
-    private static final int SLOT_SORT = 46;
-    private static final int SLOT_SEARCH = 48;
-    private static final int SLOT_MY = 50;
-    private static final int SLOT_MAILBOX = 52;
-    private static final int SLOT_NEXT = 53;
+    private static final int SLOT_PREV           = 45;
+    private static final int SLOT_SORT           = 46;
+    private static final int SLOT_SEARCH         = 48;
+    private static final int SLOT_MY             = 50;
+    private static final int SLOT_ADV_SEARCH     = 51;
+    private static final int SLOT_MAILBOX        = 52;
+    private static final int SLOT_NEXT           = 53;
 
     private final FluxMarket plugin;
     private final Player player;
@@ -92,6 +93,10 @@ public class AuctionMainGui implements FluxGui {
         inventory.setItem(SLOT_MY, ItemUtils.named(Material.CHEST, "&eMy Listings",
                 "&7Click to manage",
                 "&7your listings"));
+        inventory.setItem(SLOT_ADV_SEARCH, ItemUtils.named(Material.SPYGLASS,
+                "&8[&6AH&8] &7Advanced Search",
+                "&7Filter by name, price range,",
+                "&7and seller"));
 
         int mailboxCount = plugin.getAuctionModule().getDao().countMailbox(player.getUniqueId());
         inventory.setItem(SLOT_MAILBOX, ItemUtils.named(
@@ -173,6 +178,10 @@ public class AuctionMainGui implements FluxGui {
         }
         if (slot == SLOT_MY) {
             new AuctionMyListingsGui(plugin, player, this).open();
+            return;
+        }
+        if (slot == SLOT_ADV_SEARCH) {
+            new AuctionAdvancedSearchGui(plugin, player, this).open();
             return;
         }
         if (slot == SLOT_MAILBOX) {

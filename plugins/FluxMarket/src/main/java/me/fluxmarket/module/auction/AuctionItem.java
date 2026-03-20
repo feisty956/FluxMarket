@@ -58,6 +58,7 @@ public class AuctionItem {
                     .legacySection().serialize(meta.displayName());
         }
         String n = item.getType().name().toLowerCase().replace('_', ' ');
+        if (n.isEmpty()) return "Unknown Item";
         return Character.toUpperCase(n.charAt(0)) + n.substring(1);
     }
 
@@ -71,6 +72,9 @@ public class AuctionItem {
     }
 
     public void extendExpiry(long millis) { expiresAt += millis; }
+
+    /** Returns the stack size of the listed item. */
+    public int getQuantity() { return item.getAmount(); }
 
     // Getters
     public UUID getUuid() { return uuid; }

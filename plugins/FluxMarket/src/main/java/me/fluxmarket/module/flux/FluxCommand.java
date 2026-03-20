@@ -2,6 +2,9 @@ package me.fluxmarket.module.flux;
 
 import me.fluxmarket.FluxMarket;
 import me.fluxmarket.config.ConfigManager;
+import me.fluxmarket.module.dashboard.DashboardGui;
+import me.fluxmarket.module.treasury.TreasuryDao;
+import me.fluxmarket.module.treasury.TreasuryGui;
 import me.fluxmarket.util.FormatUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -35,7 +38,7 @@ public class FluxCommand implements CommandExecutor, TabCompleter {
         String prefix = cfg.getPrefix();
 
         if (args.length == 0) {
-            sender.sendMessage(FormatUtils.color(prefix + "&eUsage: /market <price|trend|reset|event> [item]"));
+            sender.sendMessage(FormatUtils.color(prefix + "&eUsage: /market <price|trend|reset|event|stats|treasury> [item]"));
             return true;
         }
 
@@ -110,7 +113,42 @@ public class FluxCommand implements CommandExecutor, TabCompleter {
                     sender.sendMessage(FormatUtils.color(prefix + "&cUnbekanntes Event. Optionen: crash, boom, taxday"));
                 }
             }
-            default -> sender.sendMessage(FormatUtils.color(prefix + "&eUsage: /market <price|trend|reset|event> [item]"));
+            case "stats" -> {
+                if (!(sender instanceof Player player)) {
+                    sender.sendMessage(FormatUtils.color(prefix + "&cOnly players can open the dashboard."));
+                    return true;
+                }
+                if (!player.hasPermission("fluxmarket.market.use")) {
+                    player.sendMessage(prefix + cfg.getMessage("no-permission"));
+                    return true;
+                }
+                DashboardGui.openAsync(plugin, player);
+            }
+            case "treasury" -> {
+                if (!(sender instanceof Player player)) {
+                    sender.sendMessage(FormatUtils.color(prefix + "&cOnly players can open the treasury."));
+                    return true;
+                }
+                if (!player.isOp() && !player.hasPermission("fluxmarket.market.admin")) {
+                    player.sendMessage(prefix + cfg.getMessage("no-permission"));
+                    return true;
+                }
+                TreasuryDao treasuryDao = plugin.getTreasuryDao();
+                if (treasuryDao == null) {
+                    player.sendMessage(FormatUtils.color(prefix + "&cTreasury is not available."));
+                    return true;
+                }
+                plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
+                    double ahTotal = treasuryDao.getTotalBySource("auction_tax");
+                    double grandTotal = treasuryDao.getGrandTotal();
+                    var recent = treasuryDao.getRecentEntries(5);
+                    plugin.getServer().getScheduler().runTask(plugin, () -> {
+                        TreasuryGui gui = new TreasuryGui(plugin, player, ahTotal, grandTotal, recent);
+                        gui.open();
+                    });
+                });
+            }
+            default -> sender.sendMessage(FormatUtils.color(prefix + "&eUsage: /market <price|trend|reset|event|stats|treasury> [item]"));
         }
         return true;
     }
@@ -167,7 +205,7 @@ public class FluxCommand implements CommandExecutor, TabCompleter {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-        if (args.length == 1) return List.of("price", "trend", "reset", "event");
+        if (args.length == 1) return List.of("price", "trend", "reset", "event", "stats", "treasury");
         if (args.length == 2) {
             return switch (args[0].toLowerCase()) {
                 case "price", "trend", "reset" -> getAllMaterials();

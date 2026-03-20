@@ -7,6 +7,7 @@ import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
+import org.bukkit.event.inventory.PrepareAnvilEvent;
 
 import java.util.Map;
 import java.util.UUID;
@@ -47,6 +48,16 @@ public class GuiListener implements Listener {
         FluxGui gui = openGuis.get(player.getUniqueId());
         if (gui == null) return;
         gui.handleDrag(event);
+    }
+
+    /** Zero out repair cost so anvil input prompts never show an XP requirement. */
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onPrepareAnvil(PrepareAnvilEvent event) {
+        if (!(event.getView().getPlayer() instanceof org.bukkit.entity.Player player)) return;
+        if (!(openGuis.get(player.getUniqueId()) instanceof AnvilInputGui)) return;
+        if (event.getInventory() instanceof org.bukkit.inventory.AnvilInventory anvil) {
+            anvil.setRepairCost(0);
+        }
     }
 
     @EventHandler(priority = EventPriority.MONITOR)

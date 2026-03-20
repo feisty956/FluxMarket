@@ -47,9 +47,21 @@ commands:
     usage: /orders [create]
     permission: fluxmarket.orders.use
   market:
-    description: View market prices and trends.
-    usage: /market [price|trend|reset|event] [item]
+    description: View market prices, trends, dashboard and treasury.
+    usage: /market [price|trend|reset|event|stats|treasury] [item]
     permission: fluxmarket.market.use
+  pshop:
+    description: Player chest shop management.
+    usage: /pshop [list|help]
+    permission: fluxmarket.playershop.use
+  pricealert:
+    description: Set or manage AH price alerts.
+    usage: /pricealert <MATERIAL> <price> | /pricealert list
+    permission: fluxmarket.pricealert.use
+  profit:
+    description: View your sell profit tracker.
+    usage: /profit
+    permission: fluxmarket.profit.use
   fluxmarket:
     description: Plugin admin commands.
     usage: /fluxmarket <reload>
@@ -99,8 +111,11 @@ permissions:
     description: Use /market.
     default: true
   fluxmarket.market.admin:
-    description: Admin market commands.
+    description: Admin market commands (/market reset, /market event, /market treasury).
     default: op
+  fluxmarket.market.stats:
+    description: View economy dashboard (/market stats).
+    default: true
   # Rank perks — default: false means OP does NOT get these automatically.
   # Assign via a permissions plugin (LuckPerms, etc.).
   fluxmarket.multiplier.vip:
@@ -112,3 +127,18 @@ permissions:
   fluxmarket.discount.vip:
     description: VIP buy price discount.
     default: false
+  fluxmarket.pricealert.use:
+    description: Use /pricealert to set AH price alerts.
+    default: true
+  fluxmarket.profit.use:
+    description: Use /profit to view the profit tracker.
+    default: true
+  fluxmarket.playershop.use:
+    description: Buy from and browse player shops.
+    default: true
+  fluxmarket.playershop.create:
+    description: Create player chest shops.
+    default: true
+  fluxmarket.playershop.admin:
+    description: Manage other players' shops.
+    default: op

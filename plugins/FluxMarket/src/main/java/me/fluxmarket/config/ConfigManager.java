@@ -38,6 +38,8 @@ public class ConfigManager {
     public String getMysqlDatabase() { return cfg.getString("database.mysql.database", "fluxmarket"); }
     public String getMysqlUsername() { return cfg.getString("database.mysql.username", "root"); }
     public String getMysqlPassword() { return cfg.getString("database.mysql.password", ""); }
+    public boolean getMysqlUseSSL() { return cfg.getBoolean("database.mysql.use-ssl", false); }
+    public boolean getMysqlAllowPublicKeyRetrieval() { return cfg.getBoolean("database.mysql.allow-public-key-retrieval", true); }
 
     // Flux
     public int getFluxUpdateInterval() { return cfg.getInt("flux.update-interval-minutes", 15); }
@@ -79,8 +81,13 @@ public class ConfigManager {
     }
     public double getProgressionMultiplier(int tier) {
         double configured = cfg.getDouble("sell.progression.tiers." + tier + ".multiplier", 1.0);
-        double capped = cfg.getDouble("sell.progression.max-multiplier", 1.25);
-        return Math.max(1.0, Math.min(configured, capped));
+        double cap = cfg.getDouble("sell.progression.max-multiplier", 1.25);
+        if (configured > cap) {
+            plugin.getLogger().warning("[Config] sell.progression.tiers." + tier
+                    + ".multiplier (" + configured + ") exceeds max-multiplier (" + cap
+                    + ") — capping. Adjust max-multiplier if intended.");
+        }
+        return Math.max(1.0, Math.min(configured, cap));
     }
 
     // Auction
@@ -95,6 +102,8 @@ public class ConfigManager {
     public boolean isAhShulkerPreview() { return cfg.getBoolean("auction.shulker-preview", true); }
     public int getAhHistorySize() { return cfg.getInt("auction.history-size", 50); }
     public boolean isAhEmergencyDisable() { return cfg.getBoolean("auction.emergency-disable", false); }
+    public int getBulkDiscountMinQty() { return cfg.getInt("auction.bulk-discount.min-qty", 64); }
+    public double getBulkDiscountPercent() { return cfg.getDouble("auction.bulk-discount.percent", 10.0); }
 
     // Orders
     public int getOrdersMaxPerPlayer() { return cfg.getInt("orders.max-orders", 3); }
@@ -135,6 +144,9 @@ public class ConfigManager {
         }
         return best;
     }
+
+    // Player Shops
+    public int getPlayerShopMaxPerPlayer() { return cfg.getInt("player-shops.max-per-player", 5); }
 
     public FileConfiguration getRaw() { return cfg; }
 }

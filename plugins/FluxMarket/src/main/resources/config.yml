@@ -8,6 +8,10 @@ modules:
   auction: true
   orders: true
   flux: true
+  player-shops: true
+
+player-shops:
+  max-per-player: 5
 
 database:
   type: sqlite   # sqlite | mysql
@@ -17,6 +21,8 @@ database:
     database: fluxmarket
     username: root
     password: ""
+    use-ssl: false                    # Enable SSL for MySQL connection
+    allow-public-key-retrieval: true  # Required when useSSL=false with some MySQL 8+ servers
 
 messages:
   prefix: "&8[&6FluxMarket&8] &r"
@@ -850,7 +856,7 @@ sell:
   shulker-support: true
   history-size: 20
   selltop-size: 10          # How many players appear on /selltop
-  allow-any-item: false       # Allow selling items not listed in the shop (uses default-price)
+  allow-any-item: true       # Allow selling items not listed in the shop (uses default-price)
   default-price: 1.0          # Default sell price for items not in shop categories
 
   # Sell Wands
@@ -898,6 +904,9 @@ auction:
   shulker-preview: true
   history-size: 50           # Transaction history entries per player
   emergency-disable: false   # Set true to disable all AH activity (admin toggle)
+  bulk-discount:
+    min-qty: 64        # Minimum stack quantity to qualify for the bulk listing discount
+    percent: 10.0      # Percent discount applied to the listing fee for bulk listings
 
 orders:
   max-orders: 3
