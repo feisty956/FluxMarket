@@ -33,7 +33,10 @@ public class DatabaseManager {
             Class.forName("com.mysql.cj.jdbc.Driver");
             var cfg = plugin.getConfigManager();
             String url = "jdbc:mysql://" + cfg.getMysqlHost() + ":" + cfg.getMysqlPort()
-                    + "/" + cfg.getMysqlDatabase() + "?useSSL=false&allowPublicKeyRetrieval=true&autoReconnect=true";
+                    + "/" + cfg.getMysqlDatabase()
+                    + "?useSSL=" + cfg.getMysqlUseSSL()
+                    + "&allowPublicKeyRetrieval=" + cfg.getMysqlAllowPublicKeyRetrieval()
+                    + "&autoReconnect=true";
             connection = DriverManager.getConnection(url, cfg.getMysqlUsername(), cfg.getMysqlPassword());
         } else {
             Class.forName("org.sqlite.JDBC");

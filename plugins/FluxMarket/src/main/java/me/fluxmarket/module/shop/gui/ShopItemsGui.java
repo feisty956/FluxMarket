@@ -78,6 +78,16 @@ public class ShopItemsGui implements FluxGui {
                 lore.add("&7Sell: &c$" + FormatUtils.formatMoney(sellPrice));
             }
             lore.add("&7Trend: " + trend + " &7" + FormatUtils.formatPercent(pct));
+            // Price history sparkline (last 8 snapshots)
+            if (engine != null) {
+                double[] history = engine.getPriceHistory(shopItem.material(), 8);
+                boolean hasHistory = java.util.Arrays.stream(history).anyMatch(v -> v > 0);
+                if (hasHistory) {
+                    double minH = java.util.Arrays.stream(history).filter(v -> v > 0).min().orElse(0);
+                    double maxH = java.util.Arrays.stream(history).filter(v -> v > 0).max().orElse(0);
+                    lore.add("&7Chart:  &f" + FormatUtils.sparkline(history, minH, maxH));
+                }
+            }
             lore.add("");
             if (shopItem.buyEnabled())  lore.add("&eLeft-click &7to buy");
             if (shopItem.sellEnabled()) lore.add("&eRight-click &7to sell");

@@ -51,6 +51,12 @@ public class AuctionManager {
                         ItemUtils.serialize(item.getItem()), 0, "Auction won");
                 double net = item.getCurrentBid() * (1.0 - plugin.getConfigManager().getAhSaleTax());
                 dao.addMailboxItem(item.getSellerUuid(), null, net, "Auction sold");
+                double bidSaleTax = item.getCurrentBid() - net;
+                if (bidSaleTax > 0 && plugin.getTreasuryDao() != null) {
+                    double taxToRecord = bidSaleTax;
+                    plugin.getServer().getScheduler().runTaskAsynchronously(plugin,
+                            () -> plugin.getTreasuryDao().addEntry("auction_tax", taxToRecord));
+                }
 
                 // Record transaction
                 String bidderName = item.getHighestBidderName() != null ? item.getHighestBidderName() : "Unknown";
@@ -93,6 +99,10 @@ public class AuctionManager {
         if (count >= plugin.getConfigManager().getAhMaxListings()) return false;
         listings.put(item.getUuid(), item);
         dao.save(item);
+        // Notify any players who have a price alert for this item
+        if (plugin.getPriceAlertManager() != null) {
+            plugin.getPriceAlertManager().checkAlerts(item);
+        }
         return true;
     }
 
@@ -122,8 +132,16 @@ public class AuctionManager {
         if (!plugin.getEconomyProvider().has(Bukkit.getOfflinePlayer(bidder), amount)) return BidResult.NO_MONEY;
 
         if (item.getHighestBidder() != null && item.getCurrentBid() > 0) {
-            plugin.getEconomyProvider().deposit(
-                    Bukkit.getOfflinePlayer(item.getHighestBidder()), item.getCurrentBid());
+            try {
+                boolean refundOk = plugin.getEconomyProvider().deposit(
+                        Bukkit.getOfflinePlayer(item.getHighestBidder()), item.getCurrentBid());
+                if (!refundOk) {
+                    plugin.getLogger().warning("Failed to refund outbid to " + item.getHighestBidderName()
+                            + " for " + item.getCurrentBid() + " — continuing anyway.");
+                }
+            } catch (Exception e) {
+                plugin.getLogger().warning("Exception refunding outbid: " + e.getMessage());
+            }
             notify(item.getHighestBidder(),
                     "&cYou were outbid on &f" + item.getItemDisplayName() + "!");
         }
@@ -149,6 +167,12 @@ public class AuctionManager {
         plugin.getEconomyProvider().withdraw(Bukkit.getOfflinePlayer(buyer), price);
         double afterTax = price * (1.0 - plugin.getConfigManager().getAhSaleTax());
         plugin.getEconomyProvider().deposit(Bukkit.getOfflinePlayer(item.getSellerUuid()), afterTax);
+        double saleTax = price - afterTax;
+        if (saleTax > 0 && plugin.getTreasuryDao() != null) {
+            double taxToRecord = saleTax;
+            plugin.getServer().getScheduler().runTaskAsynchronously(plugin,
+                    () -> plugin.getTreasuryDao().addEntry("auction_tax", taxToRecord));
+        }
 
         listings.remove(item.getUuid());
         dao.delete(item.getUuid());
@@ -181,6 +205,9 @@ public class AuctionManager {
     // ─── Accessors ────────────────────────────────────────────────────────────
 
     public Collection<AuctionItem> getAll() { return listings.values(); }
+    public List<AuctionItem> getActiveItems() {
+        return listings.values().stream().filter(a -> !a.isExpired()).collect(Collectors.toList());
+    }
 
     public List<AuctionItem> getByPlayer(UUID uuid) {
         return listings.values().stream()

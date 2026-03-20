@@ -99,8 +99,14 @@ public class MarketEventManager {
     }
 
     private void schedulRevert(Runnable action, int minutes) {
-        if (revertTask != null) revertTask.cancel();
-        revertTask = plugin.getServer().getScheduler().runTaskLater(plugin, action, minutes * 60L * 20L);
+        if (revertTask != null) {
+            revertTask.cancel();
+            revertTask = null;
+        }
+        revertTask = plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
+            action.run();
+            revertTask = null;
+        }, minutes * 60L * 20L);
     }
 
     private String pickRandomMaterial() {

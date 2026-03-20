@@ -155,12 +155,28 @@ public class AuctionModule {
         }
 
         double tax = price * plugin.getConfigManager().getAhListingTax();
+        int qty = hand.getAmount();
+        int bulkMinQty = plugin.getConfigManager().getBulkDiscountMinQty();
+        double bulkPercent = plugin.getConfigManager().getBulkDiscountPercent();
+        boolean bulkApplied = qty >= bulkMinQty;
+        if (bulkApplied) {
+            tax = tax * (1.0 - bulkPercent / 100.0);
+        }
         if (!plugin.getEconomyProvider().has(player, tax)) {
             player.sendMessage(FormatUtils.color(prefix + "&cListing fee: &f" + FormatUtils.formatMoney(tax)
                     + " &c- not enough money."));
             return;
         }
         plugin.getEconomyProvider().withdraw(player, tax);
+        if (bulkApplied) {
+            player.sendMessage(FormatUtils.color(prefix + "&aBulk discount applied: &f"
+                    + bulkPercent + "% &aoff listing fee!"));
+        }
+        if (tax > 0 && plugin.getTreasuryDao() != null) {
+            double listingTax = tax;
+            plugin.getServer().getScheduler().runTaskAsynchronously(plugin,
+                    () -> plugin.getTreasuryDao().addEntry("auction_tax", listingTax));
+        }
 
         ItemStack toList = hand.clone();
         hand.setAmount(0);

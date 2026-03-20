@@ -10,6 +10,7 @@ public class SellProgressManager {
 
     // In-memory cache: playerUUID -> (category -> totalEarned)
     private final Map<UUID, Map<String, Double>> cache = new ConcurrentHashMap<>();
+    private final java.util.Set<UUID> loading = java.util.Collections.newSetFromMap(new ConcurrentHashMap<>());
     private final FluxMarket plugin;
 
     public SellProgressManager(FluxMarket plugin) {
@@ -18,6 +19,7 @@ public class SellProgressManager {
 
     // Load from DB async, store in cache (call on player join or first use)
     public void loadPlayer(UUID uuid) {
+        if (!loading.add(uuid)) return; // already loading
         plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
             Map<String, Double> earnings = new ConcurrentHashMap<>();
             try (PreparedStatement ps = plugin.getDatabaseManager().getConnection().prepareStatement(
@@ -31,13 +33,20 @@ public class SellProgressManager {
                 plugin.getLogger().warning("SellProgressManager load error: " + e.getMessage());
             }
             cache.put(uuid, earnings);
+            loading.remove(uuid);
         });
     }
 
     // Add earnings for a category, update cache, persist async
     public void addEarnings(UUID uuid, String category, double earned) {
         // Ensure DB data is loaded before computing the new total (called from async context)
-        if (!cache.containsKey(uuid)) loadPlayerSync(uuid);
+        if (!cache.containsKey(uuid) && loading.add(uuid)) {
+            loadPlayerSync(uuid);
+            loading.remove(uuid);
+        } else if (!cache.containsKey(uuid)) {
+            // Another thread is loading — wait briefly then proceed with empty cache
+            try { Thread.sleep(50); } catch (InterruptedException ignored) {}
+        }
         cache.computeIfAbsent(uuid, k -> new ConcurrentHashMap<>())
                 .merge(category, earned, Double::sum);
         double newTotal = cache.get(uuid).get(category);
