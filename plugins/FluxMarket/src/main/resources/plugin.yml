@@ -1,0 +1,114 @@
+name: FluxMarket
+version: 1.0.0
+main: me.fluxmarket.FluxMarket
+api-version: '1.21'
+author: YourName
+description: Modular economy suite with dynamic pricing engine.
+
+softdepend:
+  - Vault
+  - PlaceholderAPI
+
+commands:
+  shop:
+    description: Opens the admin shop.
+    usage: /shop
+    permission: fluxmarket.shop.use
+  sell:
+    description: Sell items.
+    usage: /sell [hand|all] [item]
+    permission: fluxmarket.sell.use
+  worth:
+    description: Check item value.
+    usage: /worth [item]
+    permission: fluxmarket.sell.worth
+  sellhistory:
+    description: View your sell history.
+    usage: /sellhistory
+    permission: fluxmarket.sell.history
+  selltop:
+    description: View top sellers leaderboard.
+    usage: /selltop
+    permission: fluxmarket.sell.top
+  sellprogress:
+    description: View your sell tier progression.
+    usage: /sellprogress
+    permission: fluxmarket.sell.progress
+  sellwand:
+    description: Create a sell wand (admin).
+    usage: /sellwand give <player> [use|time] [amount]
+    permission: fluxmarket.sell.wand
+  ah:
+    description: Auction house.
+    usage: /ah [sell|bid] [price]
+    permission: fluxmarket.auction.use
+  orders:
+    description: Player order board.
+    usage: /orders [create]
+    permission: fluxmarket.orders.use
+  market:
+    description: View market prices and trends.
+    usage: /market [price|trend|reset|event] [item]
+    permission: fluxmarket.market.use
+  fluxmarket:
+    description: Plugin admin commands.
+    usage: /fluxmarket <reload>
+    permission: fluxmarket.admin
+
+permissions:
+  fluxmarket.admin:
+    description: Full admin access.
+    default: op
+  fluxmarket.shop.use:
+    description: Use /shop.
+    default: true
+  fluxmarket.sell.use:
+    description: Use /sell.
+    default: true
+  fluxmarket.sell.worth:
+    description: Use /worth.
+    default: true
+  fluxmarket.sell.history:
+    description: Use /sellhistory.
+    default: true
+  fluxmarket.sell.top:
+    description: Use /selltop.
+    default: true
+  fluxmarket.sell.progress:
+    description: Use /sellprogress.
+    default: true
+  fluxmarket.sell.wand:
+    description: Create sell wands.
+    default: op
+  fluxmarket.auction.use:
+    description: Use /ah.
+    default: true
+  fluxmarket.auction.bypass-limit:
+    description: Bypass listing limit.
+    default: op
+  fluxmarket.auction.admin:
+    description: AH admin commands (emergency disable, history).
+    default: op
+  fluxmarket.orders.admin:
+    description: Admin order management.
+    default: op
+  fluxmarket.orders.use:
+    description: Use /orders.
+    default: true
+  fluxmarket.market.use:
+    description: Use /market.
+    default: true
+  fluxmarket.market.admin:
+    description: Admin market commands.
+    default: op
+  # Rank perks — default: false means OP does NOT get these automatically.
+  # Assign via a permissions plugin (LuckPerms, etc.).
+  fluxmarket.multiplier.vip:
+    description: VIP sell price multiplier.
+    default: false
+  fluxmarket.multiplier.mvp:
+    description: MVP sell price multiplier.
+    default: false
+  fluxmarket.discount.vip:
+    description: VIP buy price discount.
+    default: false

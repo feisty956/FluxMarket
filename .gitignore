@@ -1,0 +1,33 @@
+# Maven local repo & build output
+plugins/FluxMarket/.m2/
+plugins/FluxMarket/target/
+IndustrialCore/.m2/
+IndustrialCore/target/
+server/builder/
+server/drone/
+server/plugins/
+
+# Server runtime files
+server/world*/
+server/logs/
+server/crash-reports/
+server/cache/
+server/*.lock
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+*.iml
+.idea/
+.vscode/
+
+# Minecraft launcher / mods (large binaries)
+*.zip
+*.rar
+[mods]/
+[mods] - Kopie/
+mods/
+backpacked/
+ZdS-Launcher/
+Neuer Ordner/
+Neuer Ordner (2)/

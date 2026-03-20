@@ -1,0 +1,955 @@
+# ==========================================
+#         FluxMarket — Configuration
+# ==========================================
+
+modules:
+  shop: true
+  sell: true
+  auction: true
+  orders: true
+  flux: true
+
+database:
+  type: sqlite   # sqlite | mysql
+  mysql:
+    host: localhost
+    port: 3306
+    database: fluxmarket
+    username: root
+    password: ""
+
+messages:
+  prefix: "&8[&6FluxMarket&8] &r"
+  no-permission: "&cYou don't have permission to do that."
+  module-disabled: "&cThis module is disabled."
+  player-only: "&cOnly players can use this command."
+  reload-success: "&aConfiguration reloaded successfully."
+
+shop:
+  # When true (default), buy and sell prices are both derived from the same dynamic
+  # base price via the Flux engine (spread applied symmetrically).
+  # When false, each item can have independent buy-price and sell-price fields
+  # that are completely decoupled from each other and from the Flux engine.
+  link-prices: true
+
+  categories:
+    blocks:
+      name: "&7Blocks"
+      icon: COBBLESTONE
+      items:
+        COBBLESTONE:
+          base-price: 0.5
+          buy: true
+          sell: true
+        STONE:
+          base-price: 0.8
+          buy: true
+          sell: true
+        STONE_BRICKS:
+          base-price: 1.2
+          buy: true
+          sell: true
+        DIRT:
+          base-price: 0.2
+          buy: true
+          sell: true
+        COARSE_DIRT:
+          base-price: 0.3
+          buy: true
+          sell: true
+        GRAVEL:
+          base-price: 0.4
+          buy: true
+          sell: true
+        SAND:
+          base-price: 0.5
+          buy: true
+          sell: true
+        RED_SAND:
+          base-price: 0.6
+          buy: true
+          sell: true
+        CLAY:
+          base-price: 1.0
+          buy: true
+          sell: true
+        TERRACOTTA:
+          base-price: 1.5
+          buy: true
+          sell: true
+        GLASS:
+          base-price: 1.0
+          buy: true
+          sell: false
+        OAK_LOG:
+          base-price: 2.0
+          buy: true
+          sell: true
+        BIRCH_LOG:
+          base-price: 2.0
+          buy: true
+          sell: true
+        SPRUCE_LOG:
+          base-price: 2.0
+          buy: true
+          sell: true
+        JUNGLE_LOG:
+          base-price: 2.5
+          buy: true
+          sell: true
+        ACACIA_LOG:
+          base-price: 2.5
+          buy: true
+          sell: true
+        DARK_OAK_LOG:
+          base-price: 2.5
+          buy: true
+          sell: true
+        MANGROVE_LOG:
+          base-price: 3.0
+          buy: true
+          sell: true
+        CHERRY_LOG:
+          base-price: 3.5
+          buy: true
+          sell: true
+        OAK_PLANKS:
+          base-price: 0.6
+          buy: true
+          sell: false
+        BOOKSHELF:
+          base-price: 8.0
+          buy: true
+          sell: true
+        OBSIDIAN:
+          base-price: 5.0
+          buy: true
+          sell: true
+        NETHERRACK:
+          base-price: 0.3
+          buy: true
+          sell: false
+        BASALT:
+          base-price: 0.8
+          buy: true
+          sell: true
+        BLACKSTONE:
+          base-price: 0.9
+          buy: true
+          sell: true
+        DEEPSLATE:
+          base-price: 1.0
+          buy: true
+          sell: true
+        DRIPSTONE_BLOCK:
+          base-price: 1.0
+          buy: true
+          sell: true
+        TUFF:
+          base-price: 0.7
+          buy: true
+          sell: true
+        ANDESITE:
+          base-price: 0.4
+          buy: true
+          sell: true
+        DIORITE:
+          base-price: 0.4
+          buy: true
+          sell: true
+        GRANITE:
+          base-price: 0.4
+          buy: true
+          sell: true
+        MOSSY_COBBLESTONE:
+          base-price: 1.0
+          buy: true
+          sell: true
+        SANDSTONE:
+          base-price: 1.5
+          buy: true
+          sell: true
+        RED_SANDSTONE:
+          base-price: 1.8
+          buy: true
+          sell: true
+        BRICKS:
+          base-price: 2.0
+          buy: true
+          sell: true
+        PRISMARINE:
+          base-price: 4.0
+          buy: true
+          sell: true
+        DARK_PRISMARINE:
+          base-price: 6.0
+          buy: true
+          sell: true
+        PRISMARINE_BRICKS:
+          base-price: 5.0
+          buy: true
+          sell: true
+        PACKED_ICE:
+          base-price: 3.0
+          buy: true
+          sell: true
+        BLUE_ICE:
+          base-price: 8.0
+          buy: true
+          sell: true
+        SNOW_BLOCK:
+          base-price: 1.0
+          buy: true
+          sell: true
+        HAY_BLOCK:
+          base-price: 10.0
+          buy: true
+          sell: true
+        COBBLED_DEEPSLATE:
+          base-price: 0.6
+          buy: true
+          sell: true
+        MUD_BRICKS:
+          base-price: 1.2
+          buy: true
+          sell: true
+        BAMBOO_BLOCK:
+          base-price: 1.5
+          buy: true
+          sell: true
+
+    ores:
+      name: "&6Ores & Minerals"
+      icon: DIAMOND_ORE
+      items:
+        COAL:
+          base-price: 3.0
+          buy: true
+          sell: true
+        RAW_IRON:
+          base-price: 8.0
+          buy: true
+          sell: true
+        IRON_INGOT:
+          base-price: 15.0
+          buy: true
+          sell: true
+        RAW_COPPER:
+          base-price: 2.5
+          buy: true
+          sell: true
+        COPPER_INGOT:
+          base-price: 4.0
+          buy: true
+          sell: true
+        RAW_GOLD:
+          base-price: 12.0
+          buy: true
+          sell: true
+        GOLD_INGOT:
+          base-price: 25.0
+          buy: true
+          sell: true
+        GOLD_NUGGET:
+          base-price: 3.0
+          buy: true
+          sell: true
+        LAPIS_LAZULI:
+          base-price: 8.0
+          buy: true
+          sell: true
+        REDSTONE:
+          base-price: 5.0
+          buy: true
+          sell: true
+        DIAMOND:
+          base-price: 100.0
+          buy: true
+          sell: true
+        EMERALD:
+          base-price: 80.0
+          buy: true
+          sell: true
+        QUARTZ:
+          base-price: 4.0
+          buy: true
+          sell: true
+        AMETHYST_SHARD:
+          base-price: 6.0
+          buy: true
+          sell: true
+        NETHERITE_SCRAP:
+          base-price: 120.0
+          buy: true
+          sell: true
+        NETHERITE_INGOT:
+          base-price: 500.0
+          buy: true
+          sell: true
+          # Example of decoupled pricing — set link-prices: false to use these
+          buy-price: 550.0
+          sell-price: 450.0
+
+    farming:
+      name: "&aFarming"
+      icon: WHEAT
+      items:
+        WHEAT:
+          base-price: 2.0
+          buy: false
+          sell: true
+        WHEAT_SEEDS:
+          base-price: 0.5
+          buy: true
+          sell: false
+        CARROT:
+          base-price: 2.5
+          buy: false
+          sell: true
+        POTATO:
+          base-price: 2.0
+          buy: false
+          sell: true
+        BAKED_POTATO:
+          base-price: 3.0
+          buy: true
+          sell: true
+        BEETROOT:
+          base-price: 2.0
+          buy: false
+          sell: true
+        BEETROOT_SEEDS:
+          base-price: 0.5
+          buy: true
+          sell: false
+        SUGAR_CANE:
+          base-price: 1.5
+          buy: false
+          sell: true
+        MELON_SLICE:
+          base-price: 1.0
+          buy: false
+          sell: true
+        MELON:
+          base-price: 6.0
+          buy: true
+          sell: true
+        PUMPKIN:
+          base-price: 3.0
+          buy: false
+          sell: true
+        BAMBOO:
+          base-price: 0.5
+          buy: false
+          sell: true
+        CACTUS:
+          base-price: 1.0
+          buy: false
+          sell: true
+        SWEET_BERRIES:
+          base-price: 1.5
+          buy: false
+          sell: true
+        GLOW_BERRIES:
+          base-price: 3.0
+          buy: false
+          sell: true
+        KELP:
+          base-price: 0.8
+          buy: false
+          sell: true
+        DRIED_KELP:
+          base-price: 0.3
+          buy: false
+          sell: true
+        COCOA_BEANS:
+          base-price: 2.0
+          buy: false
+          sell: true
+        INK_SAC:
+          base-price: 3.0
+          buy: false
+          sell: true
+        GLOW_INK_SAC:
+          base-price: 8.0
+          buy: false
+          sell: true
+        HONEY_BOTTLE:
+          base-price: 4.0
+          buy: true
+          sell: true
+        HONEYCOMB:
+          base-price: 3.0
+          buy: false
+          sell: true
+        APPLE:
+          base-price: 2.0
+          buy: true
+          sell: true
+        BROWN_MUSHROOM:
+          base-price: 1.5
+          buy: false
+          sell: true
+        RED_MUSHROOM:
+          base-price: 1.5
+          buy: false
+          sell: true
+        LILY_PAD:
+          base-price: 1.0
+          buy: false
+          sell: true
+        SEA_PICKLE:
+          base-price: 2.0
+          buy: false
+          sell: true
+        TORCHFLOWER:
+          base-price: 5.0
+          buy: false
+          sell: true
+        TORCHFLOWER_SEEDS:
+          base-price: 2.0
+          buy: true
+          sell: true
+        PITCHER_POD:
+          base-price: 2.0
+          buy: true
+          sell: true
+        OAK_SAPLING:
+          base-price: 0.5
+          buy: true
+          sell: true
+        DARK_OAK_SAPLING:
+          base-price: 0.8
+          buy: true
+          sell: true
+        MANGROVE_PROPAGULE:
+          base-price: 1.0
+          buy: true
+          sell: true
+        NETHER_SPROUTS:
+          base-price: 1.0
+          buy: false
+          sell: true
+        POPPY:
+          base-price: 0.3
+          buy: true
+          sell: true
+        DANDELION:
+          base-price: 0.3
+          buy: true
+          sell: true
+        BLUE_ORCHID:
+          base-price: 0.8
+          buy: true
+          sell: true
+        ALLIUM:
+          base-price: 0.5
+          buy: true
+          sell: true
+        SUNFLOWER:
+          base-price: 1.5
+          buy: true
+          sell: true
+
+    mob_drops:
+      name: "&cMob Drops"
+      icon: ROTTEN_FLESH
+      items:
+        ROTTEN_FLESH:
+          base-price: 1.0
+          buy: false
+          sell: true
+        BONE:
+          base-price: 2.0
+          buy: false
+          sell: true
+        BONE_MEAL:
+          base-price: 0.8
+          buy: true
+          sell: true
+        SPIDER_EYE:
+          base-price: 4.0
+          buy: false
+          sell: true
+        STRING:
+          base-price: 3.0
+          buy: false
+          sell: true
+        GUNPOWDER:
+          base-price: 5.0
+          buy: false
+          sell: true
+        BLAZE_ROD:
+          base-price: 12.0
+          buy: false
+          sell: true
+        BLAZE_POWDER:
+          base-price: 7.0
+          buy: false
+          sell: true
+        ENDER_PEARL:
+          base-price: 15.0
+          buy: false
+          sell: true
+        ENDER_EYE:
+          base-price: 20.0
+          buy: true
+          sell: true
+        LEATHER:
+          base-price: 5.0
+          buy: false
+          sell: true
+        FEATHER:
+          base-price: 2.0
+          buy: false
+          sell: true
+        EGG:
+          base-price: 0.5
+          buy: false
+          sell: true
+        RABBIT_HIDE:
+          base-price: 2.5
+          buy: false
+          sell: true
+        RABBIT_FOOT:
+          base-price: 15.0
+          buy: false
+          sell: true
+        SLIME_BALL:
+          base-price: 8.0
+          buy: false
+          sell: true
+        MAGMA_CREAM:
+          base-price: 10.0
+          buy: false
+          sell: true
+        GHAST_TEAR:
+          base-price: 30.0
+          buy: false
+          sell: true
+        WITHER_SKELETON_SKULL:
+          base-price: 200.0
+          buy: false
+          sell: true
+        NETHER_STAR:
+          base-price: 2000.0
+          buy: false
+          sell: true
+        PRISMARINE_SHARD:
+          base-price: 5.0
+          buy: false
+          sell: true
+        PRISMARINE_CRYSTALS:
+          base-price: 8.0
+          buy: false
+          sell: true
+        SPONGE:
+          base-price: 50.0
+          buy: false
+          sell: true
+        SHULKER_SHELL:
+          base-price: 100.0
+          buy: false
+          sell: true
+        PHANTOM_MEMBRANE:
+          base-price: 25.0
+          buy: false
+          sell: true
+        TURTLE_SCUTE:
+          base-price: 20.0
+          buy: false
+          sell: true
+        ARMADILLO_SCUTE:
+          base-price: 15.0
+          buy: false
+          sell: true
+        TOTEM_OF_UNDYING:
+          base-price: 800.0
+          buy: false
+          sell: true
+        NAUTILUS_SHELL:
+          base-price: 40.0
+          buy: false
+          sell: true
+        ELYTRA:
+          base-price: 3000.0
+          buy: false
+          sell: true
+        BREEZE_ROD:
+          base-price: 25.0
+          buy: false
+          sell: true
+        WIND_CHARGE:
+          base-price: 5.0
+          buy: false
+          sell: true
+        DRAGON_BREATH:
+          base-price: 50.0
+          buy: false
+          sell: true
+        CREEPER_HEAD:
+          base-price: 150.0
+          buy: false
+          sell: true
+        ZOMBIE_HEAD:
+          base-price: 80.0
+          buy: false
+          sell: true
+        SKELETON_SKULL:
+          base-price: 60.0
+          buy: false
+          sell: true
+        WOLF_ARMOR:
+          base-price: 120.0
+          buy: false
+          sell: true
+
+    nether:
+      name: "&4Nether"
+      icon: NETHER_BRICK
+      items:
+        NETHER_BRICK:
+          base-price: 1.5
+          buy: true
+          sell: true
+        NETHER_WART:
+          base-price: 6.0
+          buy: true
+          sell: true
+        SOUL_SAND:
+          base-price: 1.5
+          buy: true
+          sell: true
+        SOUL_SOIL:
+          base-price: 1.0
+          buy: true
+          sell: true
+        GLOWSTONE_DUST:
+          base-price: 5.0
+          buy: true
+          sell: true
+        GLOWSTONE:
+          base-price: 18.0
+          buy: true
+          sell: true
+        MAGMA_BLOCK:
+          base-price: 3.0
+          buy: true
+          sell: true
+        CRIMSON_STEM:
+          base-price: 2.5
+          buy: true
+          sell: true
+        WARPED_STEM:
+          base-price: 2.5
+          buy: true
+          sell: true
+        SHROOMLIGHT:
+          base-price: 8.0
+          buy: true
+          sell: true
+        CRYING_OBSIDIAN:
+          base-price: 10.0
+          buy: true
+          sell: true
+        GILDED_BLACKSTONE:
+          base-price: 15.0
+          buy: true
+          sell: true
+        ANCIENT_DEBRIS:
+          base-price: 300.0
+          buy: false
+          sell: true
+        NETHER_GOLD_ORE:
+          base-price: 8.0
+          buy: false
+          sell: true
+        QUARTZ_BLOCK:
+          base-price: 14.0
+          buy: true
+          sell: true
+        NETHER_BRICK_FENCE:
+          base-price: 2.0
+          buy: true
+          sell: true
+        BONE_BLOCK:
+          base-price: 5.0
+          buy: true
+          sell: true
+        WARPED_FUNGUS:
+          base-price: 3.0
+          buy: true
+          sell: true
+        CRIMSON_FUNGUS:
+          base-price: 3.0
+          buy: true
+          sell: true
+
+    misc:
+      name: "&bMiscellaneous"
+      icon: CHEST
+      items:
+        PAPER:
+          base-price: 0.5
+          buy: true
+          sell: true
+        BOOK:
+          base-price: 3.0
+          buy: true
+          sell: true
+        GLASS_BOTTLE:
+          base-price: 1.0
+          buy: true
+          sell: false
+        FLINT:
+          base-price: 1.5
+          buy: true
+          sell: true
+        IRON_NUGGET:
+          base-price: 2.0
+          buy: true
+          sell: true
+        CHAIN:
+          base-price: 5.0
+          buy: true
+          sell: true
+        LANTERN:
+          base-price: 6.0
+          buy: true
+          sell: true
+        SOUL_LANTERN:
+          base-price: 7.0
+          buy: true
+          sell: true
+        NAME_TAG:
+          base-price: 40.0
+          buy: true
+          sell: true
+        SADDLE:
+          base-price: 50.0
+          buy: true
+          sell: true
+        LEAD:
+          base-price: 10.0
+          buy: true
+          sell: true
+        EXPERIENCE_BOTTLE:
+          base-price: 15.0
+          buy: true
+          sell: false
+        ENCHANTED_GOLDEN_APPLE:
+          base-price: 5000.0
+          buy: true
+          sell: true
+        GOLDEN_APPLE:
+          base-price: 80.0
+          buy: true
+          sell: true
+        BREAD:
+          base-price: 1.5
+          buy: true
+          sell: true
+        COOKED_BEEF:
+          base-price: 4.0
+          buy: true
+          sell: true
+        COOKED_PORKCHOP:
+          base-price: 4.0
+          buy: true
+          sell: true
+        COOKED_CHICKEN:
+          base-price: 3.0
+          buy: true
+          sell: true
+        COOKED_MUTTON:
+          base-price: 4.0
+          buy: true
+          sell: true
+        COOKED_RABBIT:
+          base-price: 5.0
+          buy: true
+          sell: true
+        COOKED_COD:
+          base-price: 3.5
+          buy: true
+          sell: true
+        COOKED_SALMON:
+          base-price: 4.5
+          buy: true
+          sell: true
+        COD:
+          base-price: 1.5
+          buy: false
+          sell: true
+        SALMON:
+          base-price: 2.0
+          buy: false
+          sell: true
+        PUFFERFISH:
+          base-price: 5.0
+          buy: false
+          sell: true
+        TROPICAL_FISH:
+          base-price: 3.0
+          buy: false
+          sell: true
+        ARROW:
+          base-price: 0.5
+          buy: true
+          sell: true
+        SPECTRAL_ARROW:
+          base-price: 1.5
+          buy: true
+          sell: false
+        TIPPED_ARROW:
+          base-price: 3.0
+          buy: true
+          sell: false
+        COMPASS:
+          base-price: 8.0
+          buy: true
+          sell: true
+        CLOCK:
+          base-price: 12.0
+          buy: true
+          sell: true
+        SPYGLASS:
+          base-price: 25.0
+          buy: true
+          sell: true
+        RECOVERY_COMPASS:
+          base-price: 60.0
+          buy: true
+          sell: true
+        BUNDLE:
+          base-price: 20.0
+          buy: true
+          sell: true
+        STICK:
+          base-price: 0.2
+          buy: true
+          sell: true
+        COAL_BLOCK:
+          base-price: 22.0
+          buy: true
+          sell: true
+        IRON_BLOCK:
+          base-price: 120.0
+          buy: true
+          sell: true
+        GOLD_BLOCK:
+          base-price: 200.0
+          buy: true
+          sell: true
+
+sell:
+  gui-enabled: true
+  worth-lore: true
+  actionbar-feedback: true
+  sound: ENTITY_EXPERIENCE_ORB_PICKUP
+  shulker-support: true
+  history-size: 20
+  selltop-size: 10          # How many players appear on /selltop
+  allow-any-item: false       # Allow selling items not listed in the shop (uses default-price)
+  default-price: 1.0          # Default sell price for items not in shop categories
+
+  # Sell Wands
+  wands:
+    enabled: true
+    default-uses: 5000       # Uses for a use-based wand
+    default-duration-days: 3 # Duration for a time-based wand
+
+  # Sell Progression — 20 tiers per category, multipliers stack on top of rank multipliers
+  progression:
+    enabled: true
+    max-multiplier: 1.25
+    # threshold = cumulative $ earned in that category to reach this tier
+    tiers:
+      1:  {threshold: 0,           multiplier: 1.00}
+      2:  {threshold: 500,         multiplier: 1.01}
+      3:  {threshold: 1500,        multiplier: 1.02}
+      4:  {threshold: 3000,        multiplier: 1.03}
+      5:  {threshold: 5000,        multiplier: 1.04}
+      6:  {threshold: 10000,       multiplier: 1.05}
+      7:  {threshold: 20000,       multiplier: 1.06}
+      8:  {threshold: 40000,       multiplier: 1.07}
+      9:  {threshold: 75000,       multiplier: 1.08}
+      10: {threshold: 125000,      multiplier: 1.10}
+      11: {threshold: 200000,      multiplier: 1.11}
+      12: {threshold: 350000,      multiplier: 1.12}
+      13: {threshold: 600000,      multiplier: 1.13}
+      14: {threshold: 1000000,     multiplier: 1.14}
+      15: {threshold: 2000000,     multiplier: 1.15}
+      16: {threshold: 5000000,     multiplier: 1.17}
+      17: {threshold: 10000000,    multiplier: 1.19}
+      18: {threshold: 25000000,    multiplier: 1.21}
+      19: {threshold: 75000000,    multiplier: 1.23}
+      20: {threshold: 200000000,   multiplier: 1.25}
+
+auction:
+  max-listings: 5
+  default-duration-hours: 48
+  min-price: 1.0
+  max-price: 1000000.0
+  listing-tax-percent: 5.0
+  sale-tax-percent: 2.0
+  anti-snipe-seconds: 30
+  expired-cleanup-days: 7
+  shulker-preview: true
+  history-size: 50           # Transaction history entries per player
+  emergency-disable: false   # Set true to disable all AH activity (admin toggle)
+
+orders:
+  max-orders: 3
+  default-expiry-hours: 72
+  min-price: 1.0
+  partial-delivery: true
+  shulker-delivery: true
+
+flux:
+  update-interval-minutes: 15
+  transaction-window-hours: 6
+  decay-lambda: 0.3
+  history-cleanup-days: 7
+  defaults:
+    max-swing: 0.4
+    sensitivity: 0.5
+    spread: 0.1
+  events:
+    enabled: true
+    check-interval-minutes: 60
+    crash:
+      enabled: true
+      chance: 0.05
+      duration-minutes: 30
+      max-drop: 0.6
+    boom:
+      enabled: true
+      chance: 0.05
+      duration-minutes: 30
+      max-rise: 0.8
+    tax-day:
+      enabled: true
+      chance: 0.03
+      duration-minutes: 30
+      sell-reduction: 0.15
+
+# Discord Webhook — leave url empty to disable
+webhook:
+  url: ""                      # Discord webhook URL
+  min-sale-amount: 10000.0     # Only notify for AH sales above this amount
+  notify-flux-events: true     # Notify on CRASH / BOOM market events
+  notify-selltop-changes: false
+
+multipliers:
+  vip:
+    permission: "fluxmarket.multiplier.vip"
+    sell-multiplier: 1.2
+  mvp:
+    permission: "fluxmarket.multiplier.mvp"
+    sell-multiplier: 1.5
+
+discounts:
+  vip:
+    permission: "fluxmarket.discount.vip"
+    buy-discount: 0.1
